@@ -24,6 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Java9InputStream {
 
+    private static final String STRING = "foo-bar-baz-qux";
+
+    private static final int SIZE = 15;
+
+    private static ByteArrayInputStream inputStream() {
+        return new ByteArrayInputStream(STRING.getBytes(StandardCharsets.UTF_8));
+    }
+
     @Test
     void transferTo() throws IOException {
         String result = transferString();
@@ -32,8 +40,8 @@ class Java9InputStream {
 
     private String transferString() throws IOException {
         try (
-                final InputStream ins = new ByteArrayInputStream("foo-bar-baz-qux".getBytes(StandardCharsets.UTF_8));
-                final ByteArrayOutputStream ous = new ByteArrayOutputStream(20)) {
+                final InputStream ins = inputStream();
+                final ByteArrayOutputStream ous = new ByteArrayOutputStream(SIZE)) {
             final long byteLength = ins.transferTo(ous);
             System.out.println(byteLength);
             return ous.toString("UTF-8");

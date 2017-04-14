@@ -47,4 +47,23 @@ class Java9InputStream {
             return ous.toString("UTF-8");
         }
     }
+
+    @Test
+    void readAllBytes() throws IOException {
+        try (final InputStream ins = inputStream()) {
+            final byte[] bytes = ins.readAllBytes();
+            final String s = new String(bytes, StandardCharsets.UTF_8);
+            assertEquals(STRING, s);
+        }
+    }
+
+    @Test
+    void readNBytes() throws IOException {
+        try (final InputStream ins = inputStream()) {
+            final byte[] bytes = new byte[20];
+            final int i = ins.readNBytes(bytes, 0, SIZE);
+            assertEquals(SIZE, i);
+            assertEquals(STRING, new String(bytes, 0, SIZE, StandardCharsets.UTF_8));
+        }
+    }
 }

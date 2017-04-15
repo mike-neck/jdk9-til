@@ -57,7 +57,7 @@ class FlowJava9 {
         private final Random random;
         private final Consumer<T> consumer;
 
-        public RandomTimeConsumer(Consumer<T> consumer) {
+        RandomTimeConsumer(Consumer<T> consumer) {
             this.consumer = consumer;
             this.random = new Random();
         }
@@ -102,7 +102,7 @@ class FlowJava9 {
 
         @Override
         public void onComplete() {
-            System.out.println("finish");
+            System.out.println("Thread[" + Thread.currentThread().getName() + "] - finish");
         }
     }
 }

@@ -18,14 +18,23 @@ package com.example.lang;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Module;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ModuleJava9 {
 
     @Test
-    void getModule() {
+    void name() {
         final Module module = String.class.getModule();
         assertEquals("java.base", module.getName());
     }
+
+    @Test
+    void packages() {
+        final Module module = int.class.getModule();
+        Arrays.stream(module.getPackages())
+                .forEach(System.out::println);
+    }
+
 }

@@ -17,7 +17,9 @@ package com.example.lang;
 
 import org.junit.jupiter.api.Test;
 
+//import javax.xml.bind.annotation.XmlElement;
 import java.lang.reflect.Module;
+import java.sql.Driver;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,4 +39,11 @@ class ModuleJava9 {
                 .forEach(System.out::println);
     }
 
+    @Test
+    void mod() {
+        final Module module = Driver.class.getModule();
+        System.out.println(module.getName());
+//        final Module module1 = XmlElement.class.getModule();
+//        System.out.println(module1.getName());
+    }
 }

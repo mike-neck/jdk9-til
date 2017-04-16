@@ -66,4 +66,19 @@ class Java9InputStream {
             assertEquals(STRING, new String(bytes, 0, SIZE, StandardCharsets.UTF_8));
         }
     }
+
+    @Test
+    void oldCopy() throws IOException {
+        try(final InputStream ins = inputStream();
+            final ByteArrayOutputStream ous = new ByteArrayOutputStream(SIZE)
+        ) {
+            byte[] bytes = new byte[8];
+            int len;
+            while ((len = ins.read(bytes)) != -1) {
+                ous.write(bytes, 0, len);
+            }
+            final String s = ous.toString("UTF-8");
+            assertEquals(STRING, s);
+        }
+    }
 }

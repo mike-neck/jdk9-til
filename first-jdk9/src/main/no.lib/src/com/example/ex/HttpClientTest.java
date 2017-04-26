@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 public class HttpClientTest {
 
     public static void main(String[] args) {
-        final ExecutorService executor = Executors.newFixedThreadPool(2);
+        final ExecutorService executor = Executors.newFixedThreadPool(1);
         final HttpClient client = HttpClient
                 .newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)

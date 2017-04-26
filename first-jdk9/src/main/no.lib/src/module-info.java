@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 module no.lib{
-    exports com.example;
+    exports com.example.ex;
     requires jdk.incubator.httpclient;
 }

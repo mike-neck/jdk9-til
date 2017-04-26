@@ -21,7 +21,6 @@ import jdk.incubator.http.HttpResponse;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,7 +37,7 @@ public class HttpClientTest {
         final HttpRequest request = HttpRequest.newBuilder(URI.create("https://www.google.com/teapot"))
                 .GET()
                 .build();
-        final CompletableFuture<Void> future = client.sendAsync(request,
+        client.sendAsync(request,
                 HttpResponse.BodyHandler.asString(StandardCharsets.UTF_8))
                 .thenApply(HttpResponse::body)
                 .thenApply(s -> String.format("[%s] - %s", Thread.currentThread().getName(), s))

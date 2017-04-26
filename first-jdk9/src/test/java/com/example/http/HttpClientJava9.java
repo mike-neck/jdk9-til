@@ -18,7 +18,7 @@ package com.example.http;
 import jdk.incubator.http.HttpClient;
 import jdk.incubator.http.HttpRequest;
 import jdk.incubator.http.HttpResponse;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -33,7 +33,7 @@ public class HttpClientJava9 {
 
     private static final String yourApiKey = "";
 
-    @Test
+//    @Test
     void getCommand() throws UnsupportedEncodingException {
         final HttpClient client = HttpClient.newBuilder()
                 .followRedirects(HttpClient.Redirect.ALWAYS)

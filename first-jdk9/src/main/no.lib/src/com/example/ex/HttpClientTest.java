@@ -35,7 +35,9 @@ public class HttpClientTest {
                 .executor(executor)
                 .followRedirects(HttpClient.Redirect.SAME_PROTOCOL)
                 .build();
-        final HttpRequest request = HttpRequest.newBuilder(URI.create("https://www.google.com/teapot")).GET().build();
+        final HttpRequest request = HttpRequest.newBuilder(URI.create("https://www.google.com/teapot"))
+                .GET()
+                .build();
         final CompletableFuture<Void> future = client.sendAsync(request,
                 HttpResponse.BodyHandler.asString(StandardCharsets.UTF_8))
                 .thenApply(HttpResponse::body)

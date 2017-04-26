@@ -42,6 +42,7 @@ public class HttpClientTest {
                 .thenApply(HttpResponse::body)
                 .thenApply(s -> String.format("[%s] - %s", Thread.currentThread().getName(), s))
                 .thenAccept(System.out::println)
-                .thenAccept(v -> executor.shutdown());
+                .join();
+        executor.shutdown();
     }
 }

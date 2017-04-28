@@ -15,16 +15,20 @@
  */
 package com.example.ex;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Flow;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class PubSub {
 
@@ -61,7 +65,7 @@ public class PubSub {
     }
 
     private static String randomLog(Random random) {
-        return String.format("[entrance-%s] - person: %s, from: %s", random.nextInt(3) + 1, Sex.random(random),
+        return String.format("[%d] - [%s] - [%s]", random.nextInt(3) + 1, Sex.random(random),
                 Prefecture.random(random));
     }
 
@@ -82,4 +86,52 @@ public class PubSub {
     }
 }
 
+class Record {
+    private final int entrance;
+    private final PubSub.Sex sex;
+    private final PubSub.Prefecture prefecture;
 
+    Record(int entrance, PubSub.Sex sex, PubSub.Prefecture prefecture) {
+        this.entrance = entrance;
+        this.sex = sex;
+        this.prefecture = prefecture;
+    }
+
+    public int getEntrance() {
+        return entrance;
+    }
+
+    public PubSub.Sex getSex() {
+        return sex;
+    }
+
+    public PubSub.Prefecture getPrefecture() {
+        return prefecture;
+    }
+}
+
+class ReadingPublisher implements Flow.Publisher<String> {
+
+    private final ExecutorService exec;
+    private final Path file;
+
+    ReadingPublisher(ExecutorService exec, Path file) {
+        this.exec = exec;
+        this.file = file;
+    }
+
+    @Override
+    public void subscribe(Flow.Subscriber<? super String> subscriber) {
+        subscriber.onSubscribe(new Flow.Subscription() {
+            @Override
+            public void request(long n) {
+                
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        });
+    }
+}

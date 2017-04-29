@@ -21,14 +21,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Flow;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class PubSub {
 
@@ -43,6 +42,7 @@ public class PubSub {
 
     private static void prepareTestDataFile(Random random) throws IOException {
         final Path tmpFile = Files.createTempFile("tmp", ".txt");
+        System.out.println(tmpFile);
         try (final BufferedWriter w = Files.newBufferedWriter(tmpFile, StandardCharsets.UTF_8)) {
             IntStream.range(0, 300)
                     .mapToObj(i -> randomLog(random))
@@ -54,7 +54,7 @@ public class PubSub {
         void apply(T t) throws Exception;
     }
 
-    static <T>Consumer<T> consumer(final ExConsumer<T> c) {
+    private static <T>Consumer<T> consumer(final ExConsumer<T> c) {
         return t -> {
             try {
                 c.apply(t);
@@ -65,7 +65,7 @@ public class PubSub {
     }
 
     private static String randomLog(Random random) {
-        return String.format("[%d] - [%s] - [%s]", random.nextInt(3) + 1, Sex.random(random),
+        return String.format("[%d] - [%s] - [%s]\n", random.nextInt(3) + 1, Sex.random(random),
                 Prefecture.random(random));
     }
 
@@ -114,6 +114,7 @@ class ReadingPublisher implements Flow.Publisher<String> {
 
     private final ExecutorService exec;
     private final Path file;
+    private final AtomicInteger callCount = new AtomicInteger(0);
 
     ReadingPublisher(ExecutorService exec, Path file) {
         this.exec = exec;
@@ -122,15 +123,53 @@ class ReadingPublisher implements Flow.Publisher<String> {
 
     @Override
     public void subscribe(Flow.Subscriber<? super String> subscriber) {
-        subscriber.onSubscribe(new Flow.Subscription() {
-            @Override
-            public void request(long n) {
-                
+        if (callCount.getAndIncrement() != 0) {
+            subscriber.onError(new IllegalStateException());
+        }
+        try {
+            final BufferedReader br = Files.newBufferedReader(file, StandardCharsets.UTF_8);
+            subscriber.onSubscribe(new Subscription(exec, subscriber, br));
+        } catch (IOException e) {
+            subscriber.onError(e);
+        }
+    }
+}
+
+class Subscription implements Flow.Subscription {
+
+    private final ExecutorService exec;
+    private final Flow.Subscriber<? super String> sb;
+    private final BufferedReader br;
+
+    Subscription(ExecutorService exec, Flow.Subscriber<? super String> sb,
+            BufferedReader br) {
+        this.exec = exec;
+        this.sb = sb;
+        this.br = br;
+    }
+
+    @Override
+    public void request(final long req) {
+        exec.submit(() -> {
+            try {
+                for (long time = req; time > 0 && br.ready(); time--) {
+                    final String line = br.readLine();
+                    sb.onNext(line);
+                }
+            } catch (IOException e) {
+                sb.onError(e);
             }
+        });
+    }
 
-            @Override
-            public void cancel() {
-
+    @Override
+    public void cancel() {
+        exec.submit(() -> {
+            try {
+                br.close();
+                sb.onComplete();
+            } catch (IOException e) {
+                sb.onError(e);
             }
         });
     }

@@ -21,11 +21,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -156,6 +158,9 @@ class Subscription implements Flow.Subscription {
                     final String line = br.readLine();
                     sb.onNext(line);
                 }
+                if (!br.ready()) {
+                    sb.onComplete();
+                }
             } catch (IOException e) {
                 sb.onError(e);
             }
@@ -172,5 +177,53 @@ class Subscription implements Flow.Subscription {
                 sb.onError(e);
             }
         });
+    }
+}
+
+class ReadingSubscriber implements Flow.Subscriber<String> {
+
+    private static final int BUFFER = 10;
+
+    private final AtomicReference<Optional<Flow.Subscription>> subscription = new AtomicReference<>(Optional.empty());
+
+    private final Consumer<String> action;
+
+    private final AtomicInteger bufferSize = new AtomicInteger(BUFFER);
+
+    ReadingSubscriber(Consumer<String> action) {
+        this.action = action;
+    }
+
+    @Override
+    public void onSubscribe(Flow.Subscription subscription) {
+        if (this.subscription.compareAndSet(Optional.empty(), Optional.of(subscription))) {
+            print();
+            this.subscription.get().ifPresent(sub -> sub.request(BUFFER));
+        }
+    }
+
+    @Override
+    public void onNext(String item) {
+        action.accept(item);
+        final int current = bufferSize.decrementAndGet();
+        if (current == 0) {
+            bufferSize.set(BUFFER);
+            print();
+            subscription.get().ifPresent(sub -> sub.request(BUFFER));
+        }
+    }
+
+    private void print() {
+        System.out.println("===[next 10]===");
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    @Override
+    public void onComplete() {
+        System.out.println("=== FINISH ===");
     }
 }

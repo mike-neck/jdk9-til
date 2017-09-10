@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    runtime group: 'mysql', name: 'mysql-connector-java', version: '5.1.44'
+    compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.0'
+    compile group: 'com.google.inject.extensions', name: 'guice-persist', version: '4.1.0'
+    testCompile 'junit:junit:4.12'
+}
+
+task showConfigurations {
+    doLast {
+        configurations.names.each {
+            println it
+        }
+    }
+}

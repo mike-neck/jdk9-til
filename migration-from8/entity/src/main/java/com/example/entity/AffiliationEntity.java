@@ -20,28 +20,23 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "affiliations", schema = "migration-from8")
-@IdClass(AffiliationEntityPK.class)
 public class AffiliationEntity {
-    private Long userId;
-    private Long departmentId;
 
-    @Id
-    @Column(name = "user_id", nullable = false)
-    public Long getUserId() {
-        return userId;
+    @EmbeddedId
+    private AffiliationEntityPK id;
+
+    public AffiliationEntity() {
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public AffiliationEntity(final AffiliationEntityPK id) {
+        this.id = id;
     }
 
-    @Id
-    @Column(name = "department_id", nullable = false)
-    public Long getDepartmentId() {
-        return departmentId;
+    public AffiliationEntityPK getId() {
+        return id;
     }
 
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+    public void setId(final AffiliationEntityPK id) {
+        this.id = id;
     }
 }

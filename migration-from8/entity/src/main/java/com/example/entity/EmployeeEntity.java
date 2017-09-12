@@ -20,7 +20,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "employees", schema = "migration-from8")
-public class EmployeesEntity {
+public class EmployeeEntity {
+
     private Long id;
     private String name;
 
@@ -30,7 +31,7 @@ public class EmployeesEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -40,7 +41,7 @@ public class EmployeesEntity {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 }

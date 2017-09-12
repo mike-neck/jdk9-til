@@ -21,6 +21,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "departments", schema = "migration-from8")
 public class DepartmentEntity {
+
     private Long id;
     private Long companyId;
     private String name;
@@ -32,7 +33,7 @@ public class DepartmentEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -42,7 +43,7 @@ public class DepartmentEntity {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(final Long companyId) {
         this.companyId = companyId;
     }
 
@@ -52,7 +53,7 @@ public class DepartmentEntity {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -62,7 +63,7 @@ public class DepartmentEntity {
         return companiesByCompanyId;
     }
 
-    public void setCompaniesByCompanyId(CompanyEntity companiesByCompanyId) {
+    public void setCompaniesByCompanyId(final CompanyEntity companiesByCompanyId) {
         this.companiesByCompanyId = companiesByCompanyId;
     }
 }

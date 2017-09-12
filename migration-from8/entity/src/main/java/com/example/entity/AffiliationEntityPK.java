@@ -16,22 +16,26 @@
 package com.example.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class AffiliationEntityPK implements Serializable {
-    private Long userId;
+    private static final long serialVersionUID = -8419924062942848690L;
+
+    private Long employeeId;
     private Long departmentId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "employee_id", nullable = false)
     @Id
-    public Long getUserId() {
-        return userId;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setEmployeeId(final Long userId) {
+        this.employeeId = userId;
     }
 
     @Column(name = "department_id", nullable = false)
@@ -40,21 +44,21 @@ public class AffiliationEntityPK implements Serializable {
         return departmentId;
     }
 
-    public void setDepartmentId(Long departmentId) {
+    public void setDepartmentId(final Long departmentId) {
         this.departmentId = departmentId;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AffiliationEntityPK that = (AffiliationEntityPK) o;
-        return Objects.equals(userId, that.userId) &&
+        final AffiliationEntityPK that = (AffiliationEntityPK) o;
+        return Objects.equals(employeeId, that.employeeId) &&
                 Objects.equals(departmentId, that.departmentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, departmentId);
+        return Objects.hash(employeeId, departmentId);
     }
 }

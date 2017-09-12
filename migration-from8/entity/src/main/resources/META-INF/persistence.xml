@@ -11,7 +11,7 @@
         <class>com.example.entity.AffiliationEntityPK</class>
         <class>com.example.entity.CompanyEntity</class>
         <class>com.example.entity.DepartmentEntity</class>
-        <class>com.example.entity.EmployeesEntity</class>
+        <class>com.example.entity.EmployeeEntity</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>

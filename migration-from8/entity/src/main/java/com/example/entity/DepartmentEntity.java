@@ -19,7 +19,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "departments", schema = "migration-from8")
+@Table(name = "departments", schema = "migration_from8")
 public class DepartmentEntity {
     private Long id;
     private Long companyId;

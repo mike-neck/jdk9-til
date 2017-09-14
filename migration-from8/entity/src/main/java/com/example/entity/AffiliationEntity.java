@@ -18,7 +18,7 @@ package com.example.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "affiliations", schema = "migration-from8")
+@Table(name = "affiliations", schema = "migration_from8")
 public class AffiliationEntity {
 
     @EmbeddedId

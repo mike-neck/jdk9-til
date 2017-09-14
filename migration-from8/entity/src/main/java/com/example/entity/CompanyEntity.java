@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "companies", schema = "migration-from8")
+@Table(name = "companies", schema = "migration_from8")
 public class CompanyEntity {
     private Long id;
     private String name;

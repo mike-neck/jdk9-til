@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "employees", schema = "migration-from8")
+@Table(name = "employees", schema = "migration_from8")
 public class EmployeeEntity {
     private Long id;
     private String name;
@@ -32,7 +32,7 @@ public class EmployeeEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 

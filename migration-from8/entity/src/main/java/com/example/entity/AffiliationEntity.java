@@ -16,7 +16,6 @@
 package com.example.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "affiliations", schema = "migration-from8")
@@ -25,11 +24,11 @@ public class AffiliationEntity {
     @EmbeddedId
     private AffiliationEntityPK id;
 
-    public AffiliationEntity() {
-    }
-
     public AffiliationEntity(final AffiliationEntityPK id) {
         this.id = id;
+    }
+
+    public AffiliationEntity() {
     }
 
     public AffiliationEntityPK getId() {

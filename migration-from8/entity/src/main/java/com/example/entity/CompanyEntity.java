@@ -22,10 +22,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "companies", schema = "migration-from8")
 public class CompanyEntity {
-
     private Long id;
     private String name;
-    private Collection<DepartmentEntity> departmentsById;
+    private Collection<DepartmentEntity> departments;
+
+    public CompanyEntity() {
+    }
+
+    public CompanyEntity(final Long id, final String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -47,12 +54,12 @@ public class CompanyEntity {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "companiesByCompanyId")
-    public Collection<DepartmentEntity> getDepartmentsById() {
-        return departmentsById;
+    @OneToMany
+    public Collection<DepartmentEntity> getDepartments() {
+        return departments;
     }
 
-    public void setDepartmentsById(final Collection<DepartmentEntity> departmentsById) {
-        this.departmentsById = departmentsById;
+    public void setDepartments(final Collection<DepartmentEntity> departments) {
+        this.departments = departments;
     }
 }

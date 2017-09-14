@@ -12,12 +12,15 @@
         <class>com.example.entity.CompanyEntity</class>
         <class>com.example.entity.DepartmentEntity</class>
         <class>com.example.entity.EmployeeEntity</class>
+        <class>com.example.entity.CompanyEntity</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/migration-from8"/>
             <property name="javax.persistence.jdbc.user" value="from8"/>
             <property name="javax.persistence.jdbc.password" value="from8"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/migration-from8"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -17,11 +17,32 @@ package com.example;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.persist.jpa.JpaPersistModule;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.persistence.EntityManager;
 
 public class Module extends AbstractModule {
 
     @Override
     protected void configure() {
         install(new JpaPersistModule("migration"));
+        bind(JPAQueryFactory.class).toProvider(QueryFactoryProvider.class);
+    }
+
+    public static class QueryFactoryProvider implements Provider<JPAQueryFactory> {
+
+        private final EntityManager em;
+
+        @Inject
+        public QueryFactoryProvider(final EntityManager em) {
+            this.em = em;
+        }
+
+        @Override
+        public JPAQueryFactory get() {
+            return new JPAQueryFactory(() -> em);
+        }
     }
 }

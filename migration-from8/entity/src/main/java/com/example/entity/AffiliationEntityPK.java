@@ -28,14 +28,22 @@ public class AffiliationEntityPK implements Serializable {
     private Long employeeId;
     private Long departmentId;
 
+    public AffiliationEntityPK() {
+    }
+
+    public AffiliationEntityPK(final Long employeeId, final Long departmentId) {
+        this.employeeId = employeeId;
+        this.departmentId = departmentId;
+    }
+
     @Column(name = "employee_id", nullable = false)
     @Id
     public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(final Long userId) {
-        this.employeeId = userId;
+    public void setEmployeeId(final Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     @Column(name = "department_id", nullable = false)

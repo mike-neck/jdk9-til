@@ -21,11 +21,18 @@ import java.util.Objects;
 @Entity
 @Table(name = "departments", schema = "migration-from8")
 public class DepartmentEntity {
-
     private Long id;
     private Long companyId;
     private String name;
-    private CompanyEntity companiesByCompanyId;
+
+    public DepartmentEntity() {
+    }
+
+    public DepartmentEntity(final Long id, final Long companyId, final String name) {
+        this.id = id;
+        this.companyId = companyId;
+        this.name = name;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -55,15 +62,5 @@ public class DepartmentEntity {
 
     public void setName(final String name) {
         this.name = name;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "company_id", referencedColumnName = "id", nullable = false)
-    public CompanyEntity getCompaniesByCompanyId() {
-        return companiesByCompanyId;
-    }
-
-    public void setCompaniesByCompanyId(final CompanyEntity companiesByCompanyId) {
-        this.companiesByCompanyId = companiesByCompanyId;
     }
 }

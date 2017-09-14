@@ -16,14 +16,15 @@
 package com.example.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "employees", schema = "migration-from8")
 public class EmployeeEntity {
-
     private Long id;
     private String name;
+    private Collection<AffiliationEntity> affiliations;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -31,7 +32,7 @@ public class EmployeeEntity {
         return id;
     }
 
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,5 +44,14 @@ public class EmployeeEntity {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    @OneToMany
+    public Collection<AffiliationEntity> getAffiliations() {
+        return affiliations;
+    }
+
+    public void setAffiliations(final Collection<AffiliationEntity> affiliations) {
+        this.affiliations = affiliations;
     }
 }

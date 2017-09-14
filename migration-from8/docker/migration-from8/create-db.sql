@@ -31,5 +31,7 @@ CREATE TABLE affiliations (
   employee_id BIGINT NOT NULL,
   department_id BIGINT NOT NULL,
   CONSTRAINT PRIMARY KEY (employee_id, department_id),
+  CONSTRAINT FOREIGN KEY (employee_id) REFERENCES employees(id),
+  CONSTRAINT FOREIGN KEY (department_id) REFERENCES departments(id),
   INDEX affiliations_department_user_idx (department_id ASC, employee_id ASC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

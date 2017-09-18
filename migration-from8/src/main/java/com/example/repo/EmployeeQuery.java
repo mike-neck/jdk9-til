@@ -15,16 +15,17 @@
  */
 package com.example.repo;
 
-import com.example.entity.EmployeeEntity;
-import com.example.entity.QAffiliationEntity;
-import com.example.entity.QEmployeeEntity;
+import com.example.entity.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class EmployeeQuery {
+
+    private static final QDepartmentEntity DEPARTMENT_AS_D = QDepartmentEntity.departmentEntity;
+
+    private static final QDepartmentEntity D = QDepartmentEntity.departmentEntity;
 
     private static final QEmployeeEntity EMPLOYEE_AS_E = QEmployeeEntity.employeeEntity;
 
@@ -54,5 +55,20 @@ public class EmployeeQuery {
                 .on(A.id.employeeId.eq(E.id))
                 .where(A.id.departmentId.eq(departmentId))
                 .fetch();
+    }
+
+    public Set<EmployeeEntity> findByCompanyId(final long companyId) {
+        final List<EmployeeEntity> list = queryFactory
+                .select(E)
+                .from(DEPARTMENT_AS_D)
+                .join(AFFILIATION_AS_A)
+                .on(D.id.eq(A.id.departmentId))
+                .join(EMPLOYEE_AS_E)
+                .on(A.id.employeeId.eq(E.id))
+                .where(D.companyId.eq(companyId))
+                .distinct()
+                .fetch();
+        final HashSet<EmployeeEntity> set = new HashSet<>(list);
+        return Collections.unmodifiableSet(set);
     }
 }

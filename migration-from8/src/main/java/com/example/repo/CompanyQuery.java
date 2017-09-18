@@ -59,4 +59,9 @@ public class CompanyQuery {
                 .where(A.id.employeeId.eq(employeeId))
                 .fetch();
     }
+
+    public List<CompanyEntity> findAll() {
+        return queryFactory.selectFrom(COMPANY_AS_C)
+                .fetch();
+    }
 }

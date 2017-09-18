@@ -15,9 +15,66 @@
  */
 package com.example;
 
-public class Main {
+import com.example.entity.CompanyEntity;
+import com.example.entity.EmployeeEntity;
+import com.example.repo.CompanyQuery;
+import com.example.repo.EmployeeQuery;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.persist.PersistService;
 
-    public static void main(String... args) {
-        
+import javax.inject.Inject;
+
+public class Main implements AutoCloseable, Runnable {
+
+    private final Injector injector;
+    private final AutoCloseable delegate;
+
+    Main(final Injector injector, final AutoCloseable delegate) {
+        this.injector = injector;
+        this.delegate = delegate;
+    }
+
+    @Override
+    public void run() {
+//        final CompanyQuery companyQuery = injector.getInstance(CompanyQuery.class);
+//        companyQuery.findAll().stream()
+//                .map(CompanyEntity::getName)
+//                .forEach(System.out::println);
+
+        final EmployeeQuery employeeQuery = injector.getInstance(EmployeeQuery.class);
+        employeeQuery.findByCompanyId(1L)
+                .stream()
+                .map(EmployeeEntity::getName)
+                .forEach(System.out::println);
+    }
+
+    public static void main(final String... args) throws Exception {
+        final Injector injector = Guice.createInjector(new Module());
+        try (final Main app = injector.getInstance(PersistInitializer.class).startApplication()) {
+            app.run();
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        delegate.close();
+    }
+
+    public static class PersistInitializer {
+
+        private final PersistService service;
+        private final Injector injector;
+
+        @Inject
+        public PersistInitializer(final PersistService service, final Injector injector) {
+            this.service = service;
+            this.injector = injector;
+        }
+
+        Main startApplication() throws Exception {
+            service.start();
+            return new Main(injector, service::stop);
+        }
     }
 }

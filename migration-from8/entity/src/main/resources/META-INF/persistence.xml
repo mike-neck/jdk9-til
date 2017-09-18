@@ -21,6 +21,9 @@
             <property name="javax.persistence.jdbc.password" value="from8"/>
             <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/migration_from8?useUnicode=true&amp;characterEncoding=utf8"/>
             <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

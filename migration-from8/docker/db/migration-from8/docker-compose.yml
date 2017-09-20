@@ -1,0 +1,13 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=migration_from8
+      - MYSQL_USER=from8
+      - MYSQL_PASSWORD=from8
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./db/conf:/etc/mysql/conf.d"

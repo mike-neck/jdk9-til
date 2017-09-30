@@ -31,3 +31,14 @@ CREATE TABLE todo_history (
   CONSTRAINT FOREIGN KEY (operator) REFERENCES users (id),
   INDEX todo_history_todo_created_idx (todo_id ASC, created_at DESC)
 ) ENGINE = InnoDB;
+
+CREATE TABLE generated_ids(
+  pk_name VARCHAR(63) NOT NULL PRIMARY KEY,
+  generated_id BIGINT NOT NULL
+) ENGINE = InnoDB;
+
+INSERT INTO generated_ids (pk_name, generated_id) VALUES
+  ('user_id', 0)
+  , ('todo_id', 0)
+  , ('todo_history_id', 0)
+;

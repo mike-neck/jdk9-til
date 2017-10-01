@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example;
+package com.example.dao;
 
-import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.dialect.Dialect;
+import com.example.AppConfig;
+import com.example.InjectConfig;
+import com.example.entity.User;
+import com.example.value.UserId;
+import org.seasar.doma.Dao;
+import org.seasar.doma.Insert;
+import org.seasar.doma.Select;
+import org.seasar.doma.Update;
+import org.seasar.doma.jdbc.Result;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
+import java.util.Optional;
 
-public class AppConfig implements Config {
+@Dao(config = AppConfig.class)
+@InjectConfig
+public interface UserDao {
 
-    @Inject
-    private DataSource dataSource;
+    @Select
+    Optional<User> findById(final UserId userId);
 
-    @Inject
-    private Dialect dialect;
+    @Insert
+    Result<User> insert(final User user);
 
-
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    @Override
-    public Dialect getDialect() {
-        return dialect;
-    }
+    @Update
+    Result<User> update(final User user);
 }

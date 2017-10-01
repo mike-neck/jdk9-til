@@ -18,6 +18,8 @@ CREATE TABLE todo_reporters (
   user_id BIGINT NOT NULL,
   todo_id BIGINT NOT NULL,
   CONSTRAINT PRIMARY KEY (user_id, todo_id)
+  , CONSTRAINT FOREIGN KEY (user_id) REFERENCES users (id)
+  , CONSTRAINT FOREIGN KEY (todo_id) REFERENCES todo (id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE todo_history (

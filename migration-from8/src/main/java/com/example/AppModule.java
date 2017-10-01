@@ -18,6 +18,7 @@ package com.example;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 
@@ -29,6 +30,7 @@ public class AppModule extends AbstractModule {
     protected void configure() {
         bind(Dialect.class).toInstance(new MysqlDialect());
         bind(DataSource.class).toProvider(DataSourceProvider.class);
+        bind(Config.class).to(AppConfig.class);
         bind(AppConfig.class).asEagerSingleton();
     }
 

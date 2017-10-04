@@ -15,36 +15,81 @@
  */
 package com.example;
 
+import com.atomikos.icatch.jta.UserTransactionImp;
+import com.atomikos.icatch.jta.UserTransactionManager;
+import com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean;
+import com.example.transaction.TransactionRequired;
+import com.example.transaction.Transactional;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
-import com.mysql.cj.jdbc.MysqlDataSource;
+import com.google.inject.matcher.Matchers;
+import com.mysql.cj.jdbc.Driver;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 
 import javax.sql.DataSource;
+import javax.transaction.SystemException;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 
 public class AppModule extends AbstractModule {
 
     @Override
     protected void configure() {
         bind(Dialect.class).toInstance(new MysqlDialect());
-        bind(DataSource.class).toProvider(DataSourceProvider.class);
+        bind(DataSource.class).toProvider(AtomikosDataSourceProvider.class);
         bind(Config.class).to(AppConfig.class);
+        bind(UserTransaction.class).toProvider(UserTransactionProvider.class);
+        bind(TransactionManager.class).toProvider(UserTransactionManagerProvider.class);
         bind(AppConfig.class).asEagerSingleton();
+
+        bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transactional.class),
+                new TransactionRequired(getProvider(TransactionManager.class)));
     }
 
-    private static class DataSourceProvider implements Provider<DataSource> {
+    private static class AtomikosDataSourceProvider implements Provider<DataSource> {
         @Override
         public DataSource get() {
-            final MysqlDataSource dataSource = new MysqlDataSource();
-            dataSource.setDatabaseName("migration_from8");
-            dataSource.setPort(3306);
+            final AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
+            dataSource.setDriverClassName(Driver.class.getCanonicalName());
             dataSource.setUser("from8");
             dataSource.setPassword("from8");
-            dataSource.setServerName("localhost");
-            dataSource.setURL("jdbc:mysql://localhost:3306/migration_from8");
+            dataSource.setUrl("jdbc:mysql://localhost:3306/migration_from8");
+            dataSource.setPoolSize(20);
+            dataSource.setBorrowConnectionTimeout(60);
+            dataSource.setUniqueResourceName("migration_from8");
             return dataSource;
+        }
+    }
+
+    private static class UserTransactionProvider implements Provider<UserTransaction> {
+
+        @Override
+        public UserTransaction get() {
+            try {
+                final UserTransactionImp userTransaction = new UserTransactionImp();
+                userTransaction.setTransactionTimeout(300);
+                return userTransaction;
+            } catch (SystemException e) {
+                throw new IllegalStateException("cannot create UserTransaction.", e);
+            }
+        }
+    }
+
+    private static class UserTransactionManagerProvider implements Provider<TransactionManager> {
+
+        @Override
+        public TransactionManager get() {
+            try {
+                final UserTransactionManager transactionManager = new UserTransactionManager();
+                transactionManager.setForceShutdown(true);
+                transactionManager.init();
+                return transactionManager;
+            } catch (SystemException e) {
+                throw new IllegalStateException("cannot create UserTransactionManager.", e);
+            }
+
         }
     }
 }

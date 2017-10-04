@@ -13,29 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example;
+package com.example.transaction;
 
-import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.dialect.Dialect;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
-public class AppConfig implements Config {
-
-    @Inject
-    private DataSource dataSource;
-
-    @Inject
-    private Dialect dialect;
-
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    @Override
-    public Dialect getDialect() {
-        return dialect;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface Transactional {
 }

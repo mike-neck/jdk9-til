@@ -17,6 +17,7 @@ package com.example.dao;
 
 import com.example.DatabaseResource;
 import com.example.entity.User;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.seasar.doma.jdbc.Result;
@@ -28,8 +29,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserDaoTest {
 
+    @ClassRule
+    public static final DatabaseResource.ExecuteOnce executeOnce = new DatabaseResource.ExecuteOnce();
+
     @Rule
-    public DatabaseResource database = new DatabaseResource();
+    public DatabaseResource database = new DatabaseResource(executeOnce);
 
     @Test
     public void insert() {

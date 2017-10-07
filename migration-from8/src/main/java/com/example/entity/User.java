@@ -20,6 +20,7 @@ import org.seasar.doma.*;
 import org.seasar.doma.jdbc.entity.NamingType;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity(naming = NamingType.SNAKE_LOWER_CASE, immutable = true)
 @Table(name = "users")
@@ -48,5 +49,17 @@ public class User {
         this.userId = userId;
         this.name = name;
         this.hireDate = hireDate;
+    }
+
+    public User updateName(final String newName) {
+        return new User(userId, newName, hireDate);
+    }
+
+    public User updateHireDate(final LocalDate newHireDate) {
+        return new User(userId, name, newHireDate);
+    }
+
+    public boolean equalsProperties(final User other) {
+        return Objects.equals(this.name, other.name) && Objects.equals(this.hireDate, other.hireDate);
     }
 }

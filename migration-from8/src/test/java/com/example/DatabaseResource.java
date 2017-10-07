@@ -19,17 +19,43 @@ import com.example.dao.TodoDao;
 import com.example.dao.TodoDaoImpl;
 import com.example.dao.UserDao;
 import com.example.dao.UserDaoImpl;
+import com.example.service.UserService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.rules.ExternalResource;
 
+import javax.transaction.TransactionManager;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public class DatabaseResource extends ExternalResource {
+
+    public static class ExecuteOnce extends ExternalResource {
+
+        final Map<Class<ExecuteOnce>, Injector> map = new HashMap<>();
+
+        @Override
+        protected void before() throws Throwable {
+            final Injector injector = map.computeIfAbsent(ExecuteOnce.class,
+                    k -> Guice.createInjector(new AppModule(), new BindingDao()));
+            if (injector == null) {
+                throw new IllegalStateException();
+            }
+        }
+
+        Injector getInjector() {
+            final Optional<Injector> injector = Optional.ofNullable(map.get(ExecuteOnce.class));
+            return injector.orElseThrow(IllegalStateException::new);
+        }
+
+    }
 
     private final Injector injector;
 
-    public DatabaseResource() {
-        injector = Guice.createInjector(new AppModule(), new BindingDao());
+    public DatabaseResource(final ExecuteOnce executeOnce) {
+        injector = executeOnce.getInjector();
     }
 
     public Injector getInjector() {
@@ -39,7 +65,19 @@ public class DatabaseResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         final InitializeDao script = injector.getInstance(InitializeDao.class);
-        script.initializeDataForTest();
+        final TransactionManager transactionManager = injector.getInstance(TransactionManager.class);
+        transactionManager.begin();
+        try {
+            script.initializeDataForTest();
+            transactionManager.commit();
+        } catch (Exception e) {
+            transactionManager.rollback();
+            throw e;
+        }
+    }
+
+    public UserService userService() {
+        return injector.getInstance(UserService.class);
     }
 
     public static class BindingDao extends AbstractModule {

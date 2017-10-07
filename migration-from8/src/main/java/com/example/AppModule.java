@@ -32,35 +32,35 @@ import javax.sql.DataSource;
 import javax.transaction.SystemException;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
+import java.time.LocalDate;
 
 public class AppModule extends AbstractModule {
 
     @Override
     protected void configure() {
         bind(Dialect.class).toInstance(new MysqlDialect());
-        bind(DataSource.class).toProvider(AtomikosDataSourceProvider.class);
+        final DataSource dataSource = dataSource();
+        bind(DataSource.class).toInstance(dataSource);
         bind(Config.class).to(AppConfig.class);
         bind(UserTransaction.class).toProvider(UserTransactionProvider.class);
-        bind(TransactionManager.class).toProvider(UserTransactionManagerProvider.class);
+        bind(TransactionManager.class).toProvider(UserTransactionManagerProvider.class).asEagerSingleton();
         bind(AppConfig.class).asEagerSingleton();
+        bind(LocalDate.class).toProvider(LocalDate::now);
 
         bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transactional.class),
                 new TransactionRequired(getProvider(TransactionManager.class)));
     }
 
-    private static class AtomikosDataSourceProvider implements Provider<DataSource> {
-        @Override
-        public DataSource get() {
-            final AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
-            dataSource.setDriverClassName(Driver.class.getCanonicalName());
-            dataSource.setUser("from8");
-            dataSource.setPassword("from8");
-            dataSource.setUrl("jdbc:mysql://localhost:3306/migration_from8");
-            dataSource.setPoolSize(20);
-            dataSource.setBorrowConnectionTimeout(60);
-            dataSource.setUniqueResourceName("migration_from8");
-            return dataSource;
-        }
+    private static DataSource dataSource() {
+        final AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
+        dataSource.setDriverClassName(Driver.class.getCanonicalName());
+        dataSource.setUser("from8");
+        dataSource.setPassword("from8");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/migration_from8");
+        dataSource.setPoolSize(20);
+        dataSource.setBorrowConnectionTimeout(60);
+        dataSource.setUniqueResourceName("migration_from8");
+        return dataSource;
     }
 
     private static class UserTransactionProvider implements Provider<UserTransaction> {

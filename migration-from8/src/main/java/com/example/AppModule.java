@@ -33,6 +33,7 @@ import javax.transaction.SystemException;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AppModule extends AbstractModule {
 
@@ -46,6 +47,7 @@ public class AppModule extends AbstractModule {
         bind(TransactionManager.class).toProvider(UserTransactionManagerProvider.class).asEagerSingleton();
         bind(AppConfig.class).asEagerSingleton();
         bind(LocalDate.class).toProvider(LocalDate::now);
+        bind(LocalDateTime.class).toProvider(LocalDateTime::now);
 
         bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transactional.class),
                 new TransactionRequired(getProvider(TransactionManager.class)));

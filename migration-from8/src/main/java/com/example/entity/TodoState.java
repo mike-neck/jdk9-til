@@ -15,6 +15,12 @@
  */
 package com.example.entity;
 
+import org.eclipse.collections.impl.factory.Lists;
+import org.seasar.doma.Domain;
+
+import java.util.NoSuchElementException;
+
+@Domain(valueType = Integer.class, factoryMethod = "fromInt")
 public enum TodoState {
 
     SUBMITTED(10),
@@ -31,5 +37,11 @@ public enum TodoState {
 
     public int getValue() {
         return value;
+    }
+
+    public static TodoState fromInt(final Integer value) {
+        return Lists.immutable.with(values())
+                .detectOptional(s -> s.value == value)
+                .orElseThrow(() -> new NoSuchElementException("Invalid state value[" + value + "]."));
     }
 }

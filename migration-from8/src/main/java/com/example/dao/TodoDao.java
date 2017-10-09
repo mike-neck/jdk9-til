@@ -18,10 +18,15 @@ package com.example.dao;
 import com.example.AppConfig;
 import com.example.InjectConfig;
 import com.example.entity.Todo;
+import com.example.entity.TodoHistory;
+import com.example.entity.TodoReporter;
+import com.example.entity.custom.TodoItem;
 import com.example.value.TodoId;
 import com.example.value.UserId;
 import org.seasar.doma.Dao;
+import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
+import org.seasar.doma.jdbc.Result;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +40,16 @@ public interface TodoDao {
 
     @Select
     List<Todo> findByUserId(final UserId userId);
+
+    @Insert
+    Result<Todo> create(final Todo todo);
+
+    @Insert
+    Result<TodoReporter> createTodoReporter(final TodoReporter reporter);
+
+    @Insert
+    Result<TodoHistory> createTodoHistory(final TodoHistory history);
+
+    @Select
+    List<TodoItem.Raw> findTodoItemById(final TodoId todoId);
 }

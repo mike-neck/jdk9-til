@@ -37,7 +37,7 @@ public class UserDaoTest {
 
     @Test
     public void insert() {
-        final UserDao userDao = database.userDao();
+        final UserDao userDao = database.service(UserDao.class);
         final User previous = new User("テストユーザー", LocalDate.of(2017, 4, 1));
         final Result<User> result = userDao.insert(previous);
 

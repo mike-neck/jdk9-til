@@ -15,10 +15,13 @@
  */
 package com.example.entity;
 
+import com.example.value.TodoHistoryId;
 import com.example.value.TodoId;
 import com.example.value.UserId;
 import org.seasar.doma.*;
 import org.seasar.doma.jdbc.entity.NamingType;
+
+import java.time.LocalDateTime;
 
 @Entity(naming = NamingType.SNAKE_LOWER_CASE, immutable = true)
 public class TodoHistory {
@@ -30,26 +33,31 @@ public class TodoHistory {
             , valueColumnName = "generated_id"
             , pkColumnValue = "todo_history_id")
     @Column(name = "id")
-    public final Long todoHistoryId;
+    public final TodoHistoryId todoHistoryId;
 
     public final TodoId todoId;
 
     public final UserId operator;
 
-    public final TodoState todoState;
+    public final TodoState state;
 
-    public TodoHistory(final TodoId todoId, final UserId operator, final TodoState todoState) {
+    public final LocalDateTime createdAt;
+
+    public TodoHistory(final TodoId todoId, final UserId operator, final TodoState state,
+            final LocalDateTime createdAt) {
+        this.createdAt = createdAt;
         this.todoHistoryId = null;
         this.todoId = todoId;
         this.operator = operator;
-        this.todoState = todoState;
+        this.state = state;
     }
 
-    public TodoHistory(final Long todoHistoryId, final TodoId todoId, final UserId operator,
-            final TodoState todoState) {
+    public TodoHistory(final TodoHistoryId todoHistoryId, final TodoId todoId, final UserId operator,
+            final TodoState state, final LocalDateTime createdAt) {
         this.todoHistoryId = todoHistoryId;
         this.todoId = todoId;
         this.operator = operator;
-        this.todoState = todoState;
+        this.state = state;
+        this.createdAt = createdAt;
     }
 }

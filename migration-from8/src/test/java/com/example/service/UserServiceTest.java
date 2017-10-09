@@ -23,9 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -45,7 +43,7 @@ public class UserServiceTest {
 
     @Test
     public void createNewUser() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         final User user = service.hireNewUser("杉田玄白");
         assertThat(user.name, is("杉田玄白"));
         assertThat(user.hireDate, is(now()));
@@ -53,7 +51,7 @@ public class UserServiceTest {
 
     @Test
     public void findUserThenFound() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         final User user = service.hireNewUser("源義経");
 
         final Optional<User> found = service.findUserById(user.userId);
@@ -68,7 +66,7 @@ public class UserServiceTest {
 
     @Test
     public void findUserThenNotFound() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         service.hireNewUser("源義経");
 
         final Optional<User> found = service.findUserById(new UserId(new Random().nextLong()));
@@ -78,7 +76,7 @@ public class UserServiceTest {
 
     @Test
     public void updateUserWithAnotherName() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         final User user = service.hireNewUser("源義経");
 
         assumeThat(user.userId, is(notNullValue()));
@@ -94,7 +92,7 @@ public class UserServiceTest {
 
     @Test
     public void updateUserWithHireDate() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         final User user = service.hireNewUser("源義経");
 
         assumeThat(user.userId, is(notNullValue()));
@@ -110,7 +108,7 @@ public class UserServiceTest {
 
     @Test
     public void updateUserWithSameProperties() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         final User user = service.hireNewUser("源義経");
 
         assumeThat(user.userId, is(notNullValue()));
@@ -121,7 +119,7 @@ public class UserServiceTest {
 
     @Test(expected = NoSuchElementException.class)
     public void updateUserWithUnknownUserId() {
-        final UserService service = database.userService();
+        final UserService service = database.service(UserService.class);
         final User user = service.hireNewUser("源義経");
 
         assumeThat(user.userId, is(notNullValue()));

@@ -20,28 +20,28 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface Result<T, E extends Exception> {
+public interface ServiceResult<T, E extends Exception> {
 
     T getOrThrow() throws E;
 
-    <R> Result<R, E> map(final Function<? super T, ? extends R> function);
+    <R> ServiceResult<R, E> map(final Function<? super T, ? extends R> function);
 
-    static <T, E extends Exception> Result<T, E> fromOptional(
+    static <T, E extends Exception> ServiceResult<T, E> fromOptional(
             @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final Optional<T> optional,
             final Supplier<? extends E> exception) {
-        return optional.<Result<T, E>>map(Result::success)
+        return optional.<ServiceResult<T, E>>map(ServiceResult::success)
                 .orElse(failure(exception));
     }
 
-    static <T, E extends Exception> Result<T, E> success(final T value) {
+    static <T, E extends Exception> ServiceResult<T, E> success(final T value) {
         return new Success<>(value);
     }
 
-    static <T, E extends Exception> Result<T, E> failure(final Supplier<? extends E> exception) {
+    static <T, E extends Exception> ServiceResult<T, E> failure(final Supplier<? extends E> exception) {
         return new Failure<>(exception);
     }
 
-    class Success<T, E extends Exception> implements Result<T, E> {
+    class Success<T, E extends Exception> implements ServiceResult<T, E> {
 
         private final T value;
 
@@ -55,7 +55,7 @@ public interface Result<T, E extends Exception> {
         }
 
         @Override
-        public <R> Result<R, E> map(final Function<? super T, ? extends R> function) {
+        public <R> ServiceResult<R, E> map(final Function<? super T, ? extends R> function) {
             return new Success<>(function.apply(value));
         }
 
@@ -83,7 +83,7 @@ public interface Result<T, E extends Exception> {
         }
     }
 
-    class Failure<T, E extends Exception> implements Result<T, E> {
+    class Failure<T, E extends Exception> implements ServiceResult<T, E> {
 
         private final Supplier<? extends E> exception;
 
@@ -97,7 +97,7 @@ public interface Result<T, E extends Exception> {
         }
 
         @Override
-        public <R> Result<R, E> map(final Function<? super T, ? extends R> function) {
+        public <R> ServiceResult<R, E> map(final Function<? super T, ? extends R> function) {
             return new Failure<>(exception);
         }
     }

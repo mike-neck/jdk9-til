@@ -18,6 +18,7 @@ package com.example.service;
 import com.example.dao.UserDao;
 import com.example.entity.User;
 import com.example.transaction.Transactional;
+import com.example.util.ServiceResult;
 import com.example.value.UserId;
 import org.seasar.doma.jdbc.Result;
 
@@ -56,7 +57,7 @@ public class UserService {
     @Transactional
     public Optional<User> updateUser(final UserId userId,
             final String name, final LocalDate hireDate) {
-        return com.example.util.Result.fromOptional(findUserById(userId),
+        return ServiceResult.fromOptional(findUserById(userId),
                 () -> new NoSuchElementException("user not found. id: " + userId.getValue()))
                 .map(u -> u.equalsProperties(new User(userId, name, hireDate)) ?
                         Optional.<User>empty() : Optional.of(u))

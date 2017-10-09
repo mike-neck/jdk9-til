@@ -52,6 +52,15 @@ public class DatabaseResource extends ExternalResource {
 
     }
 
+    public static class BindingDao extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(TodoDao.class).to(TodoDaoImpl.class);
+            bind(UserDao.class).to(UserDaoImpl.class);
+            bind(InitializeDao.class).to(InitializeDaoImpl.class);
+        }
+    }
+
     private final Injector injector;
 
     public DatabaseResource(final ExecuteOnce executeOnce) {
@@ -76,20 +85,7 @@ public class DatabaseResource extends ExternalResource {
         }
     }
 
-    public UserService userService() {
-        return injector.getInstance(UserService.class);
-    }
-
-    public static class BindingDao extends AbstractModule {
-        @Override
-        protected void configure() {
-            bind(TodoDao.class).to(TodoDaoImpl.class);
-            bind(UserDao.class).to(UserDaoImpl.class);
-            bind(InitializeDao.class).to(InitializeDaoImpl.class);
-        }
-    }
-
-    public UserDao userDao() {
-        return injector.getInstance(UserDao.class);
+    public <S> S service(final Class<S> klass) {
+        return injector.getInstance(klass);
     }
 }

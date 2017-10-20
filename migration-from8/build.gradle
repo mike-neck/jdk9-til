@@ -5,13 +5,13 @@ repositories {
   mavenCentral()
 }
 
-sourceSets {
-  main {
-    java {
-      srcDir file("$buildDir/generated")
-    }
-  }
-}
+//sourceSets {
+//  main {
+//    java {
+//      srcDir file("$projectDir/out/generated")
+//    }
+//  }
+//}
 
 ext {
   domaVersion = '2.17.0'
@@ -37,4 +37,10 @@ processResources.destinationDir = compileJava.destinationDir
 
 idea.module {
     inheritOutputDirs = true
+}
+
+task showSourceDirs {
+    doLast {
+        println(idea.module.sourceDirs)
+    }
 }

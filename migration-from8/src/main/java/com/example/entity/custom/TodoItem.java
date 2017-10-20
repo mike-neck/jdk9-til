@@ -18,7 +18,6 @@ package com.example.entity.custom;
 import com.example.entity.TodoHistory;
 import com.example.entity.TodoState;
 import com.example.value.*;
-import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.tuple.Pair;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.tuple.Tuples;

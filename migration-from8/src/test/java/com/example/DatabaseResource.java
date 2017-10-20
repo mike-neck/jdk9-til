@@ -15,49 +15,24 @@
  */
 package com.example;
 
-import com.example.dao.TodoDao;
-import com.example.dao.TodoDaoImpl;
-import com.example.dao.UserDao;
-import com.example.dao.UserDaoImpl;
-import com.example.service.UserService;
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.rules.ExternalResource;
 
 import javax.transaction.TransactionManager;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public class DatabaseResource extends ExternalResource {
 
     public static class ExecuteOnce extends ExternalResource {
 
-        final Map<Class<ExecuteOnce>, Injector> map = new HashMap<>();
+        private static final Injector INJECTOR = Guice.createInjector(new AppModule(), new BindingDao());
 
         @Override
         protected void before() throws Throwable {
-            final Injector injector = map.computeIfAbsent(ExecuteOnce.class,
-                    k -> Guice.createInjector(new AppModule(), new BindingDao()));
-            if (injector == null) {
-                throw new IllegalStateException();
-            }
         }
 
         Injector getInjector() {
-            final Optional<Injector> injector = Optional.ofNullable(map.get(ExecuteOnce.class));
-            return injector.orElseThrow(IllegalStateException::new);
-        }
-
-    }
-
-    public static class BindingDao extends AbstractModule {
-        @Override
-        protected void configure() {
-            bind(TodoDao.class).to(TodoDaoImpl.class);
-            bind(UserDao.class).to(UserDaoImpl.class);
-            bind(InitializeDao.class).to(InitializeDaoImpl.class);
+            return INJECTOR;
         }
     }
 

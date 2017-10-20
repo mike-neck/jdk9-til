@@ -16,7 +16,9 @@
 package com.example;
 
 import com.example.dao.TodoDao;
+import com.example.dao.TodoDaoImpl;
 import com.example.dao.UserDao;
+import com.example.dao.UserDaoImpl;
 import com.google.inject.AbstractModule;
 
 public class BindingDao extends AbstractModule {

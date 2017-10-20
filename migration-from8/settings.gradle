@@ -1,0 +1,2 @@
+rootProject.name = 'migration-from8'
+include 'data'

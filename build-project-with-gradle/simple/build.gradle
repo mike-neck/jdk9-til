@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_9
+targetCompatibility = JavaVersion.VERSION_1_9
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    api 'org.slf4j:slf4j-api:1.7.25'
+    testImplementation 'junit:junit:4.12'
+}

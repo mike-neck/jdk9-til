@@ -3,17 +3,16 @@ plugins {
     id 'org.junit.platform.gradle.plugin'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_9
-targetCompatibility = JavaVersion.VERSION_1_9
-
 repositories {
     mavenCentral()
     jcenter()
 }
 
 dependencies {
-    api 'org.eclipse.collections:eclipse-collections-api:9.0.0'
-    implementation 'org.eclipse.collections:eclipse-collections:9.0.0'
+    api project(':api')
+    api project(':action')
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
 }

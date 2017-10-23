@@ -31,7 +31,7 @@ public class DefaultGroup<U extends User> implements Group<U> {
     private final String name;
     private final ImmutableSet<U> users;
 
-    private DefaultGroup(final String name, final ImmutableSet<U> users) {
+    public DefaultGroup(final String name, final ImmutableSet<U> users) {
         this.name = name;
         this.users = users;
     }

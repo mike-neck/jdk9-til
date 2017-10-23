@@ -17,6 +17,7 @@ package com.example;
 
 import com.example.impl.DefaultGroup;
 import com.example.impl.DefaultUser;
+import org.eclipse.collections.api.set.ImmutableSet;
 
 public final class DefaultImpls {
 
@@ -30,6 +31,10 @@ public final class DefaultImpls {
 
     @SafeVarargs
     public static <U extends User> Group<U> defaultGroup(final String name, final U... users) {
+        return new DefaultGroup<>(name, users);
+    }
+
+    public static <U extends User> Group<U> defaultGroup(final String name, final ImmutableSet<U> users) {
         return new DefaultGroup<>(name, users);
     }
 }

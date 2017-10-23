@@ -15,7 +15,68 @@
  */
 package com.example;
 
-public enum Result {
-    SUCCEED,
-    FAILURE
+public interface Result {
+
+    boolean isSuccess();
+
+    String getState();
+
+    default boolean isFailure() {
+        return !isSuccess();
+    }
+
+    static Result success(final String addition) {
+        return new Success(addition);
+    }
+
+    Result FAILURE = new Result() {
+        @Override
+        public boolean isSuccess() {
+            return false;
+        }
+
+        @Override
+        public String getState() {
+            return "FAILURE";
+        }
+    };
+}
+
+class Success implements Result {
+
+    private final String addition;
+
+    Success(final String addition) {
+        this.addition = addition == null? "": addition;
+    }
+
+    @Override
+    public boolean isSuccess() {
+        return false;
+    }
+
+    @Override
+    public String getState() {
+        return "SUCCESS[" + addition + "]";
+    }
+
+    @Override
+    public String toString() {
+        return getState();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Success)) return false;
+
+        final Success success = (Success) o;
+
+        return addition.equals(success.addition);
+    }
+
+    @Override
+    public int hashCode() {
+        return addition.hashCode();
+    }
 }

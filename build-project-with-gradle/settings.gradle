@@ -17,4 +17,5 @@ rootProject.name = 'build-project-with-gradle'
 include 'api'
 include 'action'
 include 'task'
+include 'task.echo'
 

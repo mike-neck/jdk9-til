@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.event;
+package com.example.task.event;
 
-public interface Event {
+public class TransferObjectEvent implements Event {
 
-    String name();
+    private final String objectName;
 
-    String message();
+    public TransferObjectEvent(final String objectName) {
+        this.objectName = objectName;
+    }
+
+    @Override
+    public String name() {
+        return "transfer_object";
+    }
+
+    @Override
+    public String message() {
+        return "{object:" + objectName + "}";
+    }
 }

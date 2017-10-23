@@ -13,10 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example;
+package com.example.task.event;
 
-@FunctionalInterface
-public interface Action {
+public class SendRequestEvent implements Event {
 
-    Result action();
+    private final String requestObject;
+
+    public SendRequestEvent(final String requestObject) {
+        this.requestObject = requestObject;
+    }
+
+    @Override
+    public String name() {
+        return "send_request";
+    }
+
+    @Override
+    public String message() {
+        return "{object:" + requestObject + "}";
+    }
 }

@@ -13,23 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.event;
+package com.example.task.event;
 
-public class SendRequestEvent implements Event {
+public interface Event {
 
-    private final String requestObject;
+    String name();
 
-    public SendRequestEvent(final String requestObject) {
-        this.requestObject = requestObject;
-    }
-
-    @Override
-    public String name() {
-        return "send_request";
-    }
-
-    @Override
-    public String message() {
-        return "{object:" + requestObject + "}";
-    }
+    String message();
 }

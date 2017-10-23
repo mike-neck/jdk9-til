@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example;
+package com.example.task;
 
-import com.example.event.Event;
+import com.example.User;
+import com.example.action.Action;
+import com.example.action.Result;
+import com.example.task.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

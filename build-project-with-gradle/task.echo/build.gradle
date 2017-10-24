@@ -11,6 +11,6 @@ repositories {
 
 dependencies {
     api project(':action')
-    implementation project(':api')
+    implementation project(':user')
     implementation project(':task')
 }

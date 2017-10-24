@@ -14,7 +14,7 @@ pluginManagement {
 }
 
 rootProject.name = 'build-project-with-gradle'
-include 'api'
+include 'user'
 include 'action'
 include 'task'
 include 'task.echo'

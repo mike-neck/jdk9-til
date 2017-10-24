@@ -15,9 +15,29 @@
  */
 package com.example.task.event;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 public interface Event {
 
     String name();
 
     String message();
+
+    static Event of(final String name, final Supplier<String> messageSupplier) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(messageSupplier);
+
+        return new Event() {
+            @Override
+            public String name() {
+                return name;
+            }
+
+            @Override
+            public String message() {
+                return messageSupplier.get();
+            }
+        };
+    }
 }

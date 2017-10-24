@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.task.echo;
+package com.example.task.copy;
 
 import com.example.User;
 import com.example.action.Action;
@@ -22,15 +22,17 @@ import com.example.task.Task;
 import com.example.task.event.Event;
 import com.example.task.event.WrappedEvent;
 
-public class Echo implements Action {
+public class Copy implements Action {
 
-    private final User user;
+    private final User source;
+    private final User destination;
     private final Task task;
 
-    public Echo(final User user, final Event event) {
-        this.user = user;
+    public Copy(final User source, final Event event, final User destination) {
+        this.source = source;
+        this.destination = destination;
         final WrappedEvent wrappedEvent = new WrappedEvent(event);
-        this.task = new Task(user, Event.of(event.name(), () -> wrappedEvent.action("echo")), user);
+        this.task = new Task(source, Event.of(event.name(), () -> wrappedEvent.action("copy")), destination);
     }
 
     @Override
@@ -40,6 +42,6 @@ public class Echo implements Action {
 
     @Override
     public String toString() {
-        return "Echo task by " + user.name() + ".";
+        return "Copy task from: " + source.name() + " to: " + destination.name() + ".";
     }
 }

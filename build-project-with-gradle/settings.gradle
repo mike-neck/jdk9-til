@@ -18,4 +18,5 @@ include 'api'
 include 'action'
 include 'task'
 include 'task.echo'
+include 'task.copy'
 

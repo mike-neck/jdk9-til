@@ -30,6 +30,10 @@ public class WrappedEvent implements Event {
 
     @Override
     public String message() {
-        return "WrappedEvent{event:" + event.message() + "}";
+        return "{event:" + event.message() + "}";
+    }
+
+    public String action(final String taskName) {
+        return taskName + this.message();
     }
 }

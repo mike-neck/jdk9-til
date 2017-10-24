@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+    id 'org.junit.platform.gradle.plugin'
+}
+
+// これがないとライブラリーの解決ができない
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    api project(':action')
+    implementation project(':api')
+    implementation project(':task')
+}

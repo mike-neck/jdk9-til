@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.junit.platform.gradle.plugin'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation project(':action')
+
+    runtimeOnly project(':task.echo')
+    runtimeOnly project(':task.copy')
+}

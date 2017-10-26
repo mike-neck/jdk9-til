@@ -15,6 +15,11 @@
  */
 package com.example.task.event;
 
+import com.example.Event;
+import com.example.User;
+
+import java.util.List;
+
 public class WrappedEvent implements Event {
 
     private final Event event;
@@ -29,11 +34,29 @@ public class WrappedEvent implements Event {
     }
 
     @Override
-    public String message() {
-        return "{event:" + event.message() + "}";
+    public List<String> message() {
+        return Event.messageSupplier(this, "wrapped event").get();
     }
 
     public String action(final String taskName) {
         return taskName + this.message();
+    }
+
+    @Override
+    public User getSource() {
+        return event.getSource();
+    }
+
+    @Override
+    public User getDestination() {
+        return event.getDestination();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("WrappedEvent{");
+        sb.append("event=").append(event);
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -15,31 +15,17 @@
  */
 package com.example.task.echo;
 
-import com.example.User;
+import com.example.Event;
 import com.example.action.Action;
 import com.example.action.Result;
-import com.example.task.Task;
-import com.example.task.event.Event;
 import com.example.task.event.WrappedEvent;
 
 public class Echo implements Action {
 
-    private final User user;
-    private final Task task;
-
-    public Echo(final User user, final Event event) {
-        this.user = user;
-        final WrappedEvent wrappedEvent = new WrappedEvent(event);
-        this.task = new Task(user, Event.of(event.name(), () -> wrappedEvent.action("echo")), user);
-    }
+    private static final String ACTION_NAME = "echo";
 
     @Override
-    public Result action() {
-        return task.action();
-    }
-
-    @Override
-    public String toString() {
-        return "Echo task by " + user.name() + ".";
+    public Result action(final Event event) {
+        return Result.success(ACTION_NAME, new WrappedEvent(event));
     }
 }

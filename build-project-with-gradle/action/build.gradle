@@ -1,3 +1,12 @@
 plugins {
     id 'java-library'
 }
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    api project(':user')
+}

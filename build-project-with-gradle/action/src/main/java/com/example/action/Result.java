@@ -15,18 +15,24 @@
  */
 package com.example.action;
 
+import com.example.Event;
+
+import java.util.List;
+
 public interface Result {
 
     boolean isSuccess();
 
     String getState();
 
+    List<Event> getEvents();
+
     default boolean isFailure() {
         return !isSuccess();
     }
 
-    static Result success(final String addition) {
-        return new Success(addition);
+    static Result success(final String addition, final Event... events) {
+        return new Success(addition, List.of(events));
     }
 
     Result FAILURE = new Result() {
@@ -39,20 +45,27 @@ public interface Result {
         public String getState() {
             return "FAILURE";
         }
+
+        @Override
+        public List<Event> getEvents() {
+            return List.of();
+        }
     };
 }
 
 class Success implements Result {
 
     private final String addition;
+    private final List<Event> events;
 
-    Success(final String addition) {
+    Success(final String addition, final List<Event> events) {
         this.addition = addition == null? "": addition;
+        this.events = events;
     }
 
     @Override
     public boolean isSuccess() {
-        return false;
+        return true;
     }
 
     @Override
@@ -61,22 +74,12 @@ class Success implements Result {
     }
 
     @Override
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    @Override
     public String toString() {
         return getState();
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Success)) return false;
-
-        final Success success = (Success) o;
-
-        return addition.equals(success.addition);
-    }
-
-    @Override
-    public int hashCode() {
-        return addition.hashCode();
     }
 }

@@ -15,31 +15,13 @@
  */
 package com.example.task;
 
-import com.example.User;
+import com.example.Event;
 import com.example.action.Action;
 import com.example.action.Result;
-import com.example.task.event.Event;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Task implements Action {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
-
-    private final User source;
-    private final Event event;
-    private final User destination;
-
-    public Task(final User source, final Event event, final User destination) {
-        this.source = source;
-        this.event = event;
-        this.destination = destination;
-    }
-
     @Override
-    public Result action() {
-        final String msg = "Event {" + event.name() + ", " + event.message() + "} from: " + source.name() + ", to: " + destination.name();
-        LOGGER.info(msg);
-        return Result.success(msg);
+    public Result action(final Event event) {
+        return Result.success("default task", event);
     }
 }

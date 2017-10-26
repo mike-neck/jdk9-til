@@ -15,12 +15,21 @@
  */
 package com.example.task.event;
 
+import com.example.Event;
+import com.example.User;
+
+import java.util.List;
+
 public class SendRequestEvent implements Event {
 
+    private final User source;
     private final String requestObject;
+    private final User destination;
 
-    public SendRequestEvent(final String requestObject) {
+    public SendRequestEvent(final User source, final String requestObject, final User destination) {
+        this.source = source;
         this.requestObject = requestObject;
+        this.destination = destination;
     }
 
     @Override
@@ -29,7 +38,17 @@ public class SendRequestEvent implements Event {
     }
 
     @Override
-    public String message() {
-        return "{object:" + requestObject + "}";
+    public List<String> message() {
+        return List.of("{object:" + requestObject + "}");
+    }
+
+    @Override
+    public User getSource() {
+        return source;
+    }
+
+    @Override
+    public User getDestination() {
+        return destination;
     }
 }

@@ -18,16 +18,27 @@ package com.example;
 import com.example.action.Action;
 import com.example.action.Result;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 public class AppMain {
 
     public static void main(String[] args) {
         final ServiceLoader<Action> serviceLoader = ServiceLoader.load(Action.class);
+        final User source = DefaultImpls.defaultUser("Hideyoshi");
+        final Group<User> destination = DefaultImpls.defaultGroup("Earth", DefaultImpls.defaultUser("Chache"),
+                DefaultImpls.defaultUser("DT"),
+                DefaultImpls.defaultUser("Mo"), DefaultImpls.defaultUser("Han"));
+        final Event event = Event.of("original", () -> List.of("hello"))
+                .from(source)
+                .to(destination);
+
         serviceLoader.stream()
                 .map(ServiceLoader.Provider::get)
-                .map(Action::action)
-                .map(Result::getState)
+                .map(a -> a.action(event))
+                .filter(Result::isSuccess)
+                .flatMap(r -> r.getEvents().stream())
+                .map(Object::toString)
                 .forEach(System.out::println);
     }
 }

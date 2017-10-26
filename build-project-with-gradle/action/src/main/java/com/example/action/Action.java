@@ -15,8 +15,10 @@
  */
 package com.example.action;
 
+import com.example.Event;
+
 @FunctionalInterface
 public interface Action {
 
-    Result action();
+    Result action(final Event event);
 }

@@ -15,12 +15,21 @@
  */
 package com.example.task.event;
 
+import com.example.Event;
+import com.example.User;
+
+import java.util.List;
+
 public class TransferObjectEvent implements Event {
 
+    private final User source;
     private final String objectName;
+    private final User destination;
 
-    public TransferObjectEvent(final String objectName) {
+    public TransferObjectEvent(final User source, final String objectName, final User destination) {
+        this.source = source;
         this.objectName = objectName;
+        this.destination = destination;
     }
 
     @Override
@@ -29,7 +38,17 @@ public class TransferObjectEvent implements Event {
     }
 
     @Override
-    public String message() {
-        return "{object:" + objectName + "}";
+    public List<String> message() {
+        return List.of("{object:" + objectName + "}");
+    }
+
+    @Override
+    public User getSource() {
+        return null;
+    }
+
+    @Override
+    public User getDestination() {
+        return null;
     }
 }
